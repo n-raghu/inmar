@@ -16,4 +16,8 @@ def fetch_data(sql, dburi=dburi):
 
 
 def execute_sql(sql, dburi=dburi):
-    return sql
+    cnx = connect(dburi)
+    with cnx.cursor() as dbcur:
+        dbcur.execute(sql)
+    cnx.commit()
+    cnx.close()
