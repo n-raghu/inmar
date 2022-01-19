@@ -3,13 +3,18 @@ import logging
 from essentials import fetch_data, execute_sql
 
 
-def fetch_locations():
+def fetch_locations(**kwargs):
     qry = '''
             SELECT
                 *
             FROM
                 location
     '''
+    where_clause = ''
+    for k,v in kwargs.items():
+        where_clause += f"{k}='{v}' AND "
+    if where_clause:
+        qry = qry + ' WHERE ' + where_clause[:-5]
     return fetch_data(qry)
 
 
