@@ -1,0 +1,46 @@
+version: "3.6"
+
+volumes:
+    bakerystocks_dat:
+        external: false
+        name: vol_bakerystock_dat
+
+networks:
+    innet:
+        name: inmar-net
+        ipam:
+            driver: default
+            config:
+              - subnet: 172.99.6.0/27
+
+services:
+    svc_bakerystock:
+        command: sleep 16d
+        build: .
+        image: inmar
+        working_dir: /inmar/apps/bakerystock
+        container_name: bakerystock
+        hostname: host_bakerystock
+        volumes:
+            - /home/raghu.neerukonda/repos/inmar:/inmar
+        networks:
+            innet:
+                ipv4_address: 172.99.6.16
+        ports:
+            - 39001:8000
+
+    db_bakerystock:
+        image: postgres
+        container_name: bakerystockdb
+        hostname: host_bakerystockdb
+        restart: always
+        ports:
+            - 38001:5432
+        networks:
+            - innet
+        environment:
+            POSTGRES_USER: pgusr
+            POSTGRES_DB: bakerystockdb
+            POSTGRES_PASSWORD: pgusr
+        volumes:
+            - bakerystocks_dat:/var/lib/postgresql/data
