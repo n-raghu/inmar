@@ -15,10 +15,11 @@ def fetch_locations(**kwargs):
         where_clause += f"{k}='{v}' AND "
     if where_clause:
         qry = qry + ' WHERE ' + where_clause[:-5]
+    logging.info(qry)
     return fetch_data(qry)
 
 
-def post_locations(dict_location: dict):
+def create_locations(dict_location: dict):
     qry = f'''
             INSERT INTO
                     location(location, department, category, subcategory)
@@ -27,6 +28,28 @@ def post_locations(dict_location: dict):
                     '{dict_location.get("department")}',
                     '{dict_location.get("category")}',
                     '{dict_location.get("subcategory")}';
+    '''
+    logging.info(qry)
+    execute_sql(qry)
+
+
+def update_locations(dict_location: dict):
+    set_params = ''
+    for k,v in dict_location.items():
+        set_params += f"{k}='{v}', "
+    qry = f'''
+            UPDATE
+                    location
+            SET
+                    {set_params.strip()[:-1]}
+    '''
+    logging.info(qry)
+    execute_sql(qry)
+
+
+def del_locations(dict_location: dict):
+    qry = f'''
+
     '''
     logging.info(qry)
     execute_sql(qry)
