@@ -19,6 +19,6 @@
 - Start the services using below command which creates 3 containers in the backend. **First container hosts the service/API, second container hosts the PostgreSQL flavor of RDBMS engine and the third container for ingestion job**
 > docker-compose -f compose-inmar.yml up -d
 - Hit the below URI in browser to start the OAS3 page and to play with the APIs
-> <hostip>:39001/bakerystock
+> {hostname_or_ip_address_of_host}:39001/bakerystock
 - Container created for ingestion job will be running idle, ingestion job can be triggered inside the container whenever new data exists.
 - Running ingestion job in every cycle will create duplicate data, will need to work on archiving the ingested CSV files before running job as cycles.
