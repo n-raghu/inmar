@@ -1,8 +1,8 @@
-"""bakerystockmodel
+"""BakeryStock Model
 
-Revision ID: 4a2fee7be16f
+Revision ID: dfdc6ffe84d5
 Revises: 
-Create Date: 2022-01-19 03:58:13.306630
+Create Date: 2022-01-20 04:48:41.721652
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4a2fee7be16f'
+revision = 'dfdc6ffe84d5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,13 +22,12 @@ def upgrade():
     sa.Column('err_class', sa.String(), nullable=True),
     sa.Column('err_resource', sa.String(), nullable=True),
     sa.Column('err_msg', sa.String(), nullable=True),
-    sa.Column('app_stamp', sa.TIMESTAMP(), nullable=True),
     sa.Column('db_stamp', sa.TIMESTAMP(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=True),
     sa.Column('tbl_id', sa.Text(), nullable=False),
     sa.PrimaryKeyConstraint('tbl_id')
     )
     op.create_table('location',
-    sa.Column('active', sa.Boolean(), nullable=True),
+    sa.Column('active', sa.Boolean(), server_default='1', nullable=True),
     sa.Column('location', sa.Text(), nullable=True),
     sa.Column('department', sa.Text(), nullable=True),
     sa.Column('category', sa.Text(), nullable=True),

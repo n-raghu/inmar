@@ -56,5 +56,5 @@ services:
         networks:
             - innet
         depends_on:
+            - db_bakerystock
             - svc_bakerystock
-            - job_bakerystock

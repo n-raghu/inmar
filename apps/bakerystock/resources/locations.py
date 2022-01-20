@@ -19,37 +19,56 @@ def fetch_locations(**kwargs):
     return fetch_data(qry)
 
 
-def create_locations(dict_location: dict):
+def create_locations(input_doc: dict):
     qry = f'''
             INSERT INTO
                     location(location, department, category, subcategory)
             SELECT
-                    '{dict_location.get("location")}',
-                    '{dict_location.get("department")}',
-                    '{dict_location.get("category")}',
-                    '{dict_location.get("subcategory")}';
+                    '{input_doc.get("location")}',
+                    '{input_doc.get("department")}',
+                    '{input_doc.get("category")}',
+                    '{input_doc.get("subcategory")}';
     '''
     logging.info(qry)
     execute_sql(qry)
 
 
-def update_locations(dict_location: dict):
+def update_locations(
+    location: str,
+    department: str,
+    category: str,
+    subcategory: str,
+    input_doc: dict
+):
     set_params = ''
-    for k,v in dict_location.items():
-        set_params += f"{k}='{v}', "
+    for k,v in input_doc.items():
+        if v:
+            set_params += f"{k}='{v}', "
     qry = f'''
             UPDATE
                     location
             SET
                     {set_params.strip()[:-1]}
+            WHERE
+                    location='{location}'
+            AND     department='{department}' AND category='{category}' AND subcategory='{subcategory}'
     '''
     logging.info(qry)
     execute_sql(qry)
 
 
-def del_locations(dict_location: dict):
+def del_locations(
+    location: str,
+    department: str,
+    category: str,
+    subcategory: str,
+):
     qry = f'''
-
+            DELETE FROM
+                    location
+            WHERE
+                    location='{location}'
+            AND     department='{department}' AND category='{category}' AND subcategory='{subcategory}'
     '''
     logging.info(qry)
     execute_sql(qry)

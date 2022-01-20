@@ -19,7 +19,7 @@ TIMES = say.TIMESTAMP
 
 class Location(BASE):
     __tablename__ = 'location'
-    active = COL(BOOL, server_default=True)
+    active = COL(BOOL, default=True, server_default="1")
     location = COL(TXT)
     department = COL(TXT)
     category = COL(TXT)

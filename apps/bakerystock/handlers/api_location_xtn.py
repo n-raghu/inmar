@@ -1,9 +1,9 @@
 import logging
 import traceback
 from fastapi import APIRouter, Response
-from inmar.apps.bakerystock.essentials import record_error
 
 from resources import locations
+from essentials import record_error
 from schemamodels import SchemaPutLocations
 
 api = APIRouter()
