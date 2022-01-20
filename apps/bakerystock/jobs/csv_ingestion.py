@@ -4,7 +4,7 @@ import logging
 import traceback
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
-from essentials import dburi
+from essentials import CFG
 from psycopg2 import connect
 
 
@@ -54,7 +54,9 @@ def aio_ingester(files, dburi):
 if __name__ == '__main__':
     try:
         logging.info("CHECKING FOR FILES")
-        dat_file_path = '../dat'
+        datastore_cfg = CFG['datastore']
+        dat_file_path = CFG['csv_dat_path']
+        dburi = f"{datastore_cfg['engine']}://{datastore_cfg['uid']}:{datastore_cfg['pwd']}@{datastore_cfg['host']}/{datastore_cfg['dbname']}"
         files = fetch_files(dat_file_path)
         aio_ingester(files, dburi)
     except Exception:

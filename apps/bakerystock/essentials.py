@@ -1,12 +1,14 @@
+import yaml
 from psycopg2 import connect
+from bson.objectid import ObjectId
 from psycopg2.extras import RealDictCursor
 
-from bson.objectid import ObjectId
+with open('env.yml') as yfile:
+    CFG = yaml.safe_load(yfile.read())
 
-dburi = 'postgresql://pgusr:pgusr@bakerystockdb.inmar-net/bakerystockdb'
 
-
-def fetch_data(sql, dburi=dburi):
+def fetch_data(sql, datastore_cfg=CFG['datastore']):
+    dburi = f"{datastore_cfg['engine']}://{datastore_cfg['uid']}:{datastore_cfg['pwd']}@{datastore_cfg['host']}/{datastore_cfg['dbname']}"
     cnx = connect(dburi)
     with cnx.cursor(cursor_factory=RealDictCursor) as dbcur:
         dbcur.execute(sql)
@@ -16,7 +18,8 @@ def fetch_data(sql, dburi=dburi):
     return sql_dat
 
 
-def execute_sql(sql, dburi=dburi):
+def execute_sql(sql, datastore_cfg=CFG['datastore']):
+    dburi = f"{datastore_cfg['engine']}://{datastore_cfg['uid']}:{datastore_cfg['pwd']}@{datastore_cfg['host']}/{datastore_cfg['dbname']}"
     cnx = connect(dburi)
     with cnx.cursor() as dbcur:
         dbcur.execute(sql)
