@@ -1,15 +1,15 @@
 import logging
 import traceback
 from fastapi import APIRouter, Response
+from inmar.apps.bakerystock.essentials import record_error
 
 from resources import locations
 from schemamodels import SchemaPutLocations
 
-logging.basicConfig(level=logging.INFO)
 api = APIRouter()
-
+point_desc = 'Location Extension API'
+logging.basicConfig(level=logging.INFO)
 point_category = '/location/{location_id}/department/{department_id}/category/{category_id}/subcategory/{subcategory_id}'
-
 
 @api.get(point_category)
 def get_category(
@@ -27,12 +27,18 @@ def get_category(
             subcategory=subcategory_id,
         )
     except Exception as err:
+        exc_msg = str(traceback.format_exc())
         response.status_code = 422
-        logging.error(str(traceback.format_exc()))
+        logging.error(exc_msg)
+        record_error(
+            point_desc,
+            err_resource='GET',
+            err_msg=exc_msg
+        )
         return {
             'request': False,
             'err': err,
-            'info': traceback.format_exc()
+            'info': exc_msg
         }
 
 
@@ -56,14 +62,19 @@ def put_category(
         )
         response.status_code = 204
     except Exception as err:
+        exc_msg = str(traceback.format_exc())
         response.status_code = 422
-        logging.error(str(traceback.format_exc()))
+        logging.error(exc_msg)
+        record_error(
+            point_desc,
+            err_resource='PUT',
+            err_msg=exc_msg
+        )
         return {
             'request': False,
             'err': err,
-            'info': traceback.format_exc()
+            'info': exc_msg
         }
-
 
 @api.delete(point_category)
 def del_category(
@@ -82,10 +93,16 @@ def del_category(
         )
         response.status_code = 204
     except Exception as err:
+        exc_msg = str(traceback.format_exc())
         response.status_code = 422
-        logging.error(str(traceback.format_exc()))
+        logging.error(exc_msg)
+        record_error(
+            point_desc,
+            err_resource='DEL',
+            err_msg=exc_msg
+        )
         return {
             'request': False,
             'err': err,
-            'info': traceback.format_exc()
+            'info': exc_msg
         }
