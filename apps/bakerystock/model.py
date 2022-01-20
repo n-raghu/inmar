@@ -33,7 +33,6 @@ class ErrorLogs(BASE):
     err_class = COL(STR)
     err_resource = COL(STR)
     err_msg = COL(STR)
-    app_stamp = COL(TIMES)
     db_stamp = COL(TIMES, server_default=say.sql.text('CURRENT_TIMESTAMP'))
     tbl_id = COL(TXT, primary_key=True)
 

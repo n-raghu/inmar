@@ -1,6 +1,7 @@
 from psycopg2 import connect
 from psycopg2.extras import RealDictCursor
 
+from bson.objectid import ObjectId
 
 dburi = 'postgresql://pgusr:pgusr@bakerystockdb.inmar-net/bakerystockdb'
 
@@ -21,3 +22,14 @@ def execute_sql(sql, dburi=dburi):
         dbcur.execute(sql)
     cnx.commit()
     cnx.close()
+
+
+def record_error(err_class, err_resource, err_msg):
+    oid = str(ObjectId())
+    qry = f'''
+            INSERT INTO
+                    errorlogs(tbl_id, err_class, err_resource, err_msg)
+            SELECT
+                    '{oid}', '{err_class}', '{err_resource}', '{err_msg}'
+    '''
+    execute_sql(qry)
