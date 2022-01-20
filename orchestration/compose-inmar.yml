@@ -15,7 +15,7 @@ networks:
 
 services:
     svc_bakerystock:
-        command: sleep 16d
+        command: uvicorn service:app --host 0.0.0.0 --workers 5
         build: .
         image: inmar
         working_dir: /inmar/apps/bakerystock
@@ -44,3 +44,17 @@ services:
             POSTGRES_PASSWORD: pgusr
         volumes:
             - bakerystocks_dat:/var/lib/postgresql/data
+
+    job_bakerystock:
+        command: uvicorn service:app --host 0.0.0.0 --workers 5
+        image: inmar
+        working_dir: /inmar/apps/bakerystock
+        container_name: job_bakerystock
+        hostname: host_job_bakerystock
+        volumes:
+            - /home/raghu.neerukonda/repos/inmar:/inmar
+        networks:
+            - innet
+        depends_on:
+            - svc_bakerystock
+            - job_bakerystock
