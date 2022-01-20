@@ -4,6 +4,7 @@ from essentials import fetch_data, execute_sql
 
 
 def fetch_locations(**kwargs):
+    page = kwargs.pop('page')
     qry = '''
             SELECT
                 *
@@ -16,7 +17,7 @@ def fetch_locations(**kwargs):
     if where_clause:
         qry = qry + ' WHERE ' + where_clause[:-5]
     logging.info(qry)
-    return fetch_data(qry)
+    return fetch_data(page, qry)
 
 
 def create_locations(input_doc: dict):

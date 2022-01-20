@@ -14,9 +14,14 @@ point_desc = 'Location API'
 
 
 @api.get(point_location)
-def all_locations(response: Response):
+def all_locations(response: Response, page: int=1):
     try:
-        return locations.fetch_locations()
+        dat_tuple = locations.fetch_locations(page=page)
+        dat_ = dat_tuple[0]
+        response.headers["Total-Records"] = str(dat_tuple[1])
+        response.headers["Total-Pages"] = str(dat_tuple[2])
+        response.headers["Page-Rows"] = str(len(dat_))
+        return dat_
     except Exception as err:
         exc_msg = str(traceback.format_exc())
         response.status_code = 422

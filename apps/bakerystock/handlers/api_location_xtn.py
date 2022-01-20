@@ -17,15 +17,22 @@ def get_category(
     location_id: str,
     department_id: str,
     category_id: str,
-    subcategory_id: str
+    subcategory_id: str,
+    page: int=1,
 ):
     try:
-        return locations.fetch_locations(
+        dat_tuple = locations.fetch_locations(
+            page=page,
             location=location_id,
             department=department_id,
             category=category_id,
             subcategory=subcategory_id,
         )
+        dat_ = dat_tuple[0]
+        response.headers["Total-Records"] = str(dat_tuple[1])
+        response.headers["Total-Pages"] = str(dat_tuple[2])
+        response.headers["Page-Rows"] = str(len(dat_))
+        return dat_
     except Exception as err:
         exc_msg = str(traceback.format_exc())
         response.status_code = 422

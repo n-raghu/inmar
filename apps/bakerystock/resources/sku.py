@@ -2,6 +2,7 @@ from essentials import fetch_data
 
 
 def fetch_sku(**kwargs):
+    page = kwargs.pop('page')
     where_clause = ''
     for k,v in kwargs.items():
         if v:
@@ -16,4 +17,4 @@ def fetch_sku(**kwargs):
             {where_clause if where_clause else ''}
     '''
 
-    return fetch_data(qry)
+    return fetch_data(page, qry)
