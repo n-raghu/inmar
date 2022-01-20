@@ -1,10 +1,10 @@
-from asyncio import as_completed
 import sys
 import glob
 import logging
 import traceback
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
+from essentials import dburi
 from psycopg2 import connect
 
 
@@ -55,7 +55,6 @@ if __name__ == '__main__':
     try:
         logging.info("CHECKING FOR FILES")
         dat_file_path = '../dat'
-        dburi = 'postgresql://pgusr:pgusr@bakerystockdb.inmar-net/bakerystockdb'
         files = fetch_files(dat_file_path)
         aio_ingester(files, dburi)
     except Exception:
